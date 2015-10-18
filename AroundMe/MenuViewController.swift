@@ -54,6 +54,12 @@ class MenuViewController: UITableViewController, FBSDKLoginButtonDelegate {
         let vc = storyboard.instantiateViewControllerWithIdentifier("LoginViewController")
         self.presentViewController(vc, animated: true, completion: nil)
     }
+    
+    override func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        let header = view as! UITableViewHeaderFooterView
+        header.textLabel?.textColor = UIColor.whiteColor()
+        header.textLabel!.font = UIFont(name: "Gill Sans", size: 14)!
+    }
 
     // MARK: - Table view data source
 

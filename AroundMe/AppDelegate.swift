@@ -8,16 +8,28 @@
 
 import UIKit
 import FBSDKCoreKit
-
+import CoreLocation
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    var locationManager: CLLocationManager?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
+        
+        locationManager = CLLocationManager()
+        let status = CLLocationManager.authorizationStatus()
+    
+        if status != CLAuthorizationStatus.AuthorizedAlways{
+            self.locationManager?.requestAlwaysAuthorization()
+        }
+        else {
+            print("Location Auth enabled")
+        }
+        
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions);
     }
     
