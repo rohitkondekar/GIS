@@ -12,11 +12,10 @@ import MapKit
 class HomeTableViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
 
     @IBOutlet weak var menuButton: UIBarButtonItem!
-    @IBOutlet weak var mapView: MKMapView!
-    
-    var locationManager: CLLocationManager?
-    
+    var containerViewController: ContainerViewController?
 
+    @IBOutlet weak var navigationBar: UINavigationItem!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -25,27 +24,6 @@ class HomeTableViewController: UIViewController, MKMapViewDelegate, CLLocationMa
             menuButton.action = "revealToggle:"
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
-    
-        locationManager = CLLocationManager()
-        locationManager?.delegate = self
-        
-        if CLLocationManager.authorizationStatus() != CLAuthorizationStatus.AuthorizedAlways{
-            self.locationManager?.requestAlwaysAuthorization()
-        }
-
-        mapView.delegate = self
-        mapView.showsCompass = true
-        mapView.showsUserLocation = true
-        
-        
-        let userLocation = mapView.userLocation
-        print(userLocation.coordinate)
-        
-        mapView.hidden = true;
-        
-        
-        //let region = MKCoordinateRegionMakeWithDistance(userLocation.location!.coordinate, 2000, 2000)
-        //mapView.setRegion(region, animated: true)
         
                 // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -59,34 +37,12 @@ class HomeTableViewController: UIViewController, MKMapViewDelegate, CLLocationMa
         // Dispose of any resources that can be recreated.
     }
     
-    func mapViewDidFinishLoadingMap(mapView: MKMapView) {
-
-    }
-    
-    
-    // Mark: - Map Methods
-    func mapView(mapView: MKMapView, didUpdateUserLocation userLocation: MKUserLocation) {
-        mapView.centerCoordinate = (userLocation.location?.coordinate)!
-    }
-    
-    
-    // Mark: - Buttons
-    @IBAction func gpsButton(sender: UIButton) {
-        
-        
-        let userLocation = mapView.userLocation
-        
-        if userLocation.location != nil {
-            
-            let region = MKCoordinateRegionMakeWithDistance(
-                userLocation.location!.coordinate, 2000, 2000)
-            
-            mapView.setRegion(region, animated: true)
-            
+       
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "embedContainer" {
+            self.containerViewController = segue.destinationViewController as! ContainerViewController
         }
-    
     }
-
     /*
     // MARK: - Navigation
 

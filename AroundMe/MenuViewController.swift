@@ -16,6 +16,7 @@ class MenuViewController: UITableViewController, FBSDKLoginButtonDelegate {
     @IBOutlet weak var ProfileProfile: UIImageView!
     @IBOutlet weak var FacebookLoginButton: FBSDKLoginButton!
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -31,7 +32,7 @@ class MenuViewController: UITableViewController, FBSDKLoginButtonDelegate {
         }
         
         // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
+        self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
@@ -61,6 +62,16 @@ class MenuViewController: UITableViewController, FBSDKLoginButtonDelegate {
         header.textLabel!.font = UIFont(name: "Gill Sans", size: 14)!
     }
 
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        let cell = tableView.cellForRowAtIndexPath(indexPath)
+
+        // Set Label tag as 1 for this to work
+        let label = cell?.contentView.viewWithTag(1) as! UILabel
+        print(label.text!)
+    }
+    
+    
     // MARK: - Table view data source
 
 //    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {

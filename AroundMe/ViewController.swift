@@ -21,21 +21,29 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate {
         FacebookLoginButton.readPermissions = ["email","user_location"]
         FacebookLoginButton.delegate = self
         
-        if FBSDKAccessToken.currentAccessToken() == nil {
-            print("Not Logged in")
-        }
-        else{
-            if loginServerSide(FBSDKAccessToken.currentAccessToken().tokenString) {
-
-            }
-        }
-        
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    override func viewDidLayoutSubviews() {
+        if FBSDKAccessToken.currentAccessToken() == nil {
+            print("Not Logged in")
+        }
+        else{
+            if loginServerSide(FBSDKAccessToken.currentAccessToken().tokenString) {
+                
+            }
+        }
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        
+       
+    }
+    
     
     
     // Mark: Facebook Login
