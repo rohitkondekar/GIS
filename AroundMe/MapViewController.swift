@@ -20,6 +20,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     var circleOverlay:MKCircle?
     var jsonData:JSON?
+    var isWindowEnabled:Bool = false
+    
     
     //MARK: ViewRelated
     
@@ -28,7 +30,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         mapView.delegate = self
         
         // Fetch data as soon as possible
-        fetchReloadData()
+        fetchReloadData(Defaults.defaultDistance)
+        
         
         locationManager = CLLocationManager()
         locationManager?.delegate = self
@@ -39,19 +42,23 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         mapView.showsCompass        = true
         mapView.showsUserLocation   = true
         mapView.showsBuildings      = true
+    
         
-        let userLocationCordinates  = getUserLocation(mapView)
-        
-        let region = MKCoordinateRegionMakeWithDistance(userLocationCordinates, 2000, 2000)
-
-        mapView.setRegion(region, animated: true)
-        
+        self.adjustZoomLevelOnMapDefault()
         
         let rangeImage  = UIImage(named: "range query.png")
         let range       = ActionButtonItem(title: "Radius", image: rangeImage)
-        range.action    = {item in self.actionButton.toggleMenu()}
+        range.action    = {item in self.rangeButtonActive()}
         
-        actionButton    = ActionButton(attachedToView: self.view, items: [range], verticalConstrain: 119, horizontalConstraint: 14)
+        let nearByImage  = UIImage(named: "nearby.png")
+        let nearBy       = ActionButtonItem(title: "Nearby", image: nearByImage)
+        nearBy.action   = {item in self.nearByButtonActive()}
+        
+        let windowImage = UIImage(named: "polygon.png")
+        let window      = ActionButtonItem(title: "Window", image: windowImage)
+        window.action   = {item in self.windowButtonActive()}
+    
+        actionButton    = ActionButton(attachedToView: self.view, items: [nearBy,range, window], verticalConstrain: 119, horizontalConstraint: 14)
     
         actionButton.action = { button in
             button.toggleMenu()
@@ -59,8 +66,86 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         actionButton.setTitle("+",forState: .Normal)
         
         
-        addCircleOverlay(userLocationCordinates)
+        // Default remove everything just enable nearby query
+        rangeButtonDisable()
+        
+        let gestureLP:UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: "handleLongPress:")
+        gestureLP.minimumPressDuration = 0.5
+        self.mapView.addGestureRecognizer(gestureLP)
     }
+    
+    
+    //MARK: Gestures
+    
+    func handleLongPress(gestureRecognizer:UIGestureRecognizer){
+        
+        if !self.isWindowEnabled {
+            return
+        }
+        
+        if gestureRecognizer.state != UIGestureRecognizerState.Began {
+            return
+        }
+        
+        let touchPoint      = gestureRecognizer.locationInView(self.mapView)
+        let touchCoordinate = self.mapView.convertPoint(touchPoint, toCoordinateFromView: self.mapView)
+        
+        let annotation          = MKPointAnnotation()
+        annotation.coordinate   = touchCoordinate
+        self.mapView.addAnnotation(annotation)
+    }
+    
+    
+    
+    //MARK: Filter Buttons
+    
+    func rangeButtonActive(){
+        
+        // Remove Everything
+        self.windowButtonDisable()
+        
+        self.fetchReloadData(nil)
+        self.slider.hidden = false
+        addCircleOverlay(self.getUserLocation(self.mapView))
+        self.toggleActionButton()
+        self.adjustZoomLevelOnMap()
+        
+    }
+    
+    func rangeButtonDisable(){
+        self.mapView.removeAnnotations(mapView.annotations)
+        self.mapView.removeOverlays(mapView.overlays)
+        self.slider.hidden  = true
+    }
+    
+    func nearByButtonActive(){
+        
+         // Remove Everything
+        self.rangeButtonDisable()
+        self.windowButtonDisable()
+        
+        self.fetchReloadData(Defaults.defaultDistance)
+        self.toggleActionButton()
+        self.adjustZoomLevelOnMapDefault()
+    }
+
+    func windowButtonActive(){
+        self.rangeButtonDisable()
+        self.isWindowEnabled = true
+        self.toggleActionButton()
+    }
+    
+    func windowButtonDisable(){
+        self.mapView.removeAnnotations(mapView.annotations)
+        self.mapView.removeOverlays(mapView.overlays)
+        self.isWindowEnabled = false
+    }
+    
+    func toggleActionButton(){
+        actionButton.toggleMenu()
+    }
+    
+    
     
     //MARK: Circle Realted
     
@@ -95,6 +180,17 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
     }
     
+    func adjustZoomLevelOnMap(){
+        let distance    = milesToMeters(Double(slider.value))*2+200
+        let region      = MKCoordinateRegionMakeWithDistance(self.getUserLocation(self.mapView), distance, distance)
+        mapView.setRegion(region, animated: true)
+    }
+    
+    func adjustZoomLevelOnMapDefault(){
+        let region = MKCoordinateRegionMakeWithDistance(self.getUserLocation(self.mapView), 2000, 2000)
+        mapView.setRegion(region, animated: true)
+    }
+    
     
     //MARK: Slider Related
     
@@ -103,7 +199,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
     
     @IBAction func sliderChangeFinished(sender: UISlider) {
-        fetchReloadData()
+        
+        fetchReloadData(nil)
+        self.adjustZoomLevelOnMap()
     }
 
     //MARK: Custom Methods
@@ -121,10 +219,19 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
     
     //MARK: REST Calls
-    func fetchReloadData() {
+    func fetchReloadData(defaultDistance:Double?) {
         
         let userCoordinates = self.getUserLocation(self.mapView)
-        let distance        = self.milesToMeters(Double(self.slider.value))
+        
+        
+        var distance:Double
+        if defaultDistance == nil {
+            distance    = self.milesToMeters(Double(self.slider.value))
+        }
+        else {
+            distance        = defaultDistance!
+        }
+        
         let email           = NSUserDefaults.standardUserDefaults().valueForKey("email")!
         
         RestApiManager.sharedInstance.makeHTTPPostRequest("/api/ads/within", body: ["email" : email, "latitude" : userCoordinates.latitude, "longitude": userCoordinates.longitude, "distance" : distance, "category": Defaults.categoryRestaurant], onCompletion: handleRESTCall)
@@ -142,56 +249,84 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             self.mapView.removeAnnotations(self.mapView.annotations)
             self.mapView.addAnnotations(annotations)
         })
-            
-        print("annotations updated")
-        print(json.count)
     }
     
     
     
     
-    // Mark: - Map Methods
+    //Mark: - Map Methods
     func mapView(mapView: MKMapView, didUpdateUserLocation userLocation: MKUserLocation) {
         mapView.centerCoordinate = (userLocation.location?.coordinate)!
     }
     
+    
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
         
-        print("annotations relayed")
+        // Check if annotation is user location
+        if annotation.isKindOfClass(MKUserLocation){
+            return nil
+        }
         
-        let identifier = Defaults.categoryRestaurant
-        var view: MKPinAnnotationView
-        
-        if let annotation = annotation as? JSONAnnotationModel {
-
-            if let dequedView           = mapView.dequeueReusableAnnotationViewWithIdentifier(identifier) as? MKPinAnnotationView {
+        if self.isWindowEnabled {
+            
+            let identifier = Defaults.dropPinIdentifier
+            
+            var view: MKImmidiateDraggableAnnotationView
+            if let dequedView           = mapView.dequeueReusableAnnotationViewWithIdentifier(identifier) as? MKImmidiateDraggableAnnotationView {
                 dequedView.annotation   = annotation
                 view                    = dequedView
             }
             else {
-                view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-                view.canShowCallout = true
-                view.calloutOffset = CGPoint(x: -5, y: 5)
-                view.rightCalloutAccessoryView = UIButton(type: .DetailDisclosure) as UIView
+                let image           = UIImage(named: "windowpin.png")
+                view                = MKImmidiateDraggableAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+                view.image          = image
+                view.draggable      = true
+                view.canShowCallout = false
             }
             
             return view
+            
+        }
+        else {
+        
+            let identifier = Defaults.categoryRestaurant
+        
+            //var view: MKPinAnnotationView
+            var view: MKAnnotationView
+            if let annotation = annotation as? JSONAnnotationModel {
+
+                if let dequedView           = mapView.dequeueReusableAnnotationViewWithIdentifier(identifier) as? MKPinAnnotationView {
+                    dequedView.annotation   = annotation
+                    view                    = dequedView
+                }
+                else {
+                    //view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+                    
+                    let image                   = UIImage(named: "map-marker.png")
+                    view                        = MKAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+                    view.image                  = image
+                    
+                    view.canShowCallout         = true
+                    view.calloutOffset          = CGPoint(x: -5, y: 5)
+                    view.rightCalloutAccessoryView = UIButton(type: .DetailDisclosure) as UIView
+                }
+                
+                return view
+            }
         }
         
         return nil
-        
+    }
+    
+    func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        let location = view.annotation as! JSONAnnotationModel
+        let launchOptions = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving]
+        location.mapItem().openInMapsWithLaunchOptions(launchOptions)
     }
     
     
     // Mark: - Buttons
     @IBAction func gpsButton(sender: UIButton) {
-        let userLocation = mapView.userLocation
-        if userLocation.location != nil {
-            
-            let region = MKCoordinateRegionMakeWithDistance(
-                userLocation.location!.coordinate, 2000, 2000)
-            
-            mapView.setRegion(region, animated: true)
-        }
+        self.adjustZoomLevelOnMapDefault()
     }
 }

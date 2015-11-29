@@ -90,11 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AroundMe/JSONAnnotationModel.swift"
-            timestampString = "470468976.992874"
+            timestampString = "470481015.227388"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "31"
-            endingLineNumber = "31"
+            startingLineNumber = "32"
+            endingLineNumber = "32"
             landmarkName = "init(json:index:)"
             landmarkType = "5">
          </BreakpointContent>

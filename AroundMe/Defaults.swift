@@ -26,4 +26,6 @@ class Defaults {
     static let meterToMile:Double           = 1609.344
 
     static let categoryRestaurant           = "Restaurant"
+    static let dropPinIdentifier            = "DropPin"
+    static let defaultDistance:Double       = 3218 //2miles
 }
