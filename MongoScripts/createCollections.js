@@ -416,7 +416,7 @@ db.ads.insert(
 	tags:["food","discount"],
 	start_date: new Date("2015-11-19"),
 	end_date: new Date("2015-12-9"),
-	category:"Food",
+	category:"Restaurant",
 	location: {
 		type: "Point", 
 		coordinates: [ -118.3278608, 34.0941025 ] 
@@ -443,7 +443,7 @@ db.ads.insert(
 	tags:["food","discount"],
 	start_date: new Date("2015-11-19"),
 	end_date: new Date("2015-12-9"),
-	category:"Food",
+	category:"Restaurant",
 	location: {
 		type: "Point", 
 		coordinates: [-118.3269221, 34.0938449 ] 
@@ -470,7 +470,7 @@ db.ads.insert(
 	tags:["food","discount"],
 	start_date: new Date("2015-11-19"),
 	end_date: new Date("2015-12-9"),
-	category:"Food",
+	category:"Restaurant",
 	location: {
 		type: "Point", 
 		coordinates: [-118.3262944, 34.0923611 ] 
@@ -497,7 +497,7 @@ db.ads.insert(
 	tags:["food","discount"],
 	start_date: new Date("2015-11-19"),
 	end_date: new Date("2015-12-9"),
-	category:"Food",
+	category:"Restaurant",
 	location: {
 		type: "Point", 
 		coordinates: [-118.3333433, 34.0876164 ] 
@@ -524,7 +524,7 @@ db.ads.insert(
 	tags:["food"],
 	start_date: new Date("2015-11-20"),
 	end_date: new Date("2015-12-8"),
-	category:"Food",
+	category:"Restaurant",
 	location: {
 		type: "Point", 
 		coordinates: [-118.3383107, 34.0847197 ] 
@@ -551,7 +551,7 @@ db.ads.insert(
 	tags:["food"],
 	start_date: new Date("2015-11-20"),
 	end_date: new Date("2015-12-8"),
-	category:"Food",
+	category:"Restaurant",
 	location: {
 		type: "Point", 
 		coordinates: [-118.0840222, 33.8649571 ] 
@@ -578,7 +578,7 @@ db.ads.insert(
 	tags:["food"],
 	start_date: new Date("2015-11-20"),
 	end_date: new Date("2015-12-8"),
-	category:"Food",
+	category:"Restaurant",
 	location: {
 		type: "Point", 
 		coordinates: [-118.0840222, 33.8649571 ] 
@@ -605,7 +605,7 @@ db.ads.insert(
 	tags:["food"],
 	start_date: new Date("2015-11-20"),
 	end_date: new Date("2015-12-8"),
-	category:"Food",
+	category:"Restaurant",
 	location: {
 		type: "Point", 
 		coordinates: [-118.0823593, 33.8617588 ] 
@@ -632,7 +632,7 @@ db.ads.insert(
 	tags:["food"],
 	start_date: new Date("2015-11-20"),
 	end_date: new Date("2015-12-8"),
-	category:"Food",
+	category:"Restaurant",
 	location: {
 		type: "Point", 
 		coordinates: [-118.0816619, 33.8604225 ] 
@@ -648,5 +648,166 @@ db.ads.insert(
 	]
 })
 
+db.ads.insert(
+{
+	posted_by:{
+		email: "7eleven@food.com",
+    	name: "7-Eleven"
+	},
+	title:"IcedCoffee",
+	description:"Discounts on Iced Coffees",
+	tags:["food"],
+	start_date: new Date("2015-11-20"),
+	end_date: new Date("2015-12-8"),
+	category:"Restaurant",
+	location: {
+		type: "Point", 
+		coordinates: [-118.2866192, 34.0033296 ] 
+	}, //longitude,latitude
+	comments:[
+		{
+			posted_by:{
+				email: "rohitkondekar@gmail.com",
+    			name: "Rohit"
+			},
+			text:"Great Iced coffees"
+		},
+	]
+})
+
+db.ads.insert(
+{
+	posted_by:{
+		email: "dennys@food.com",
+    	name: "Dennys"
+	},
+	title:"Pancake house and coffee shop",
+	description:"Discounts on  pancakes coffees",
+	tags:["food"],
+	start_date: new Date("2015-11-20"),
+	end_date: new Date("2015-12-8"),
+	category:"Restaurant",
+	location: {
+		type: "Point", 
+		coordinates: [-118.3345556, 34.0184841 ] 
+	}, //longitude,latitude
+	comments:[
+		{
+			posted_by:{
+				email: "rohitkondekar@gmail.com",
+    			name: "Rohit"
+			},
+			text:"Awesome Pancakes and coffee"
+		},
+	]
+})
+
+db.ads.insert(
+{
+	posted_by:{
+		email: "McDonalds2@food.com",
+    	name: "Mc Donalds"
+	},
+	title:"Hamburgers",
+	description:"Discounts on Ham burgers",
+	tags:["food"],
+	start_date: new Date("2015-11-20"),
+	end_date: new Date("2015-12-8"),
+	category:"Restaurant",
+	location: {
+		type: "Point", 
+		coordinates: [-118.3085918, 34.0416374 ] 
+	}, //longitude,latitude
+	comments:[
+		{
+			posted_by:{
+				email: "rohitkondekar@gmail.com",
+    			name: "Rohit"
+			},
+			text:"Awesome fast food stuff"
+		},
+	]
+})
+
+db.ads.insert(
+{
+	posted_by:{
+		email: "pizzahut1@food.com",
+    	name: "Pizza Hut"
+	},
+	title:"Pizzas",
+	description:"Discounts on pizzas",
+	tags:["food"],
+	start_date: new Date("2015-11-20"),
+	end_date: new Date("2015-12-8"),
+	category:"Restaurant",
+	location: {
+		type: "Point", 
+		coordinates: [-118.2765555, 34.0441267 ] 
+	}, //longitude,latitude
+	comments:[
+		{
+			posted_by:{
+				email: "rohitkondekar@gmail.com",
+    			name: "Rohit"
+			},
+			text:"Awesome place for Meat Lovers"
+		},
+	]
+})
+
+db.ads.insert(
+{
+	posted_by:{
+		email: "tacoselgavilan@food.com",
+    	name: "Tacos El Gavilan"
+	},
+	title:"Tacos",
+	description:"Discounts on Tacos",
+	tags:["food"],
+	start_date: new Date("2015-11-20"),
+	end_date: new Date("2015-12-8"),
+	category:"Restaurant",
+	location: {
+		type: "Point", 
+		coordinates: [-118.2505918, 34.0239618 ] 
+	}, //longitude,latitude
+	comments:[
+		{
+			posted_by:{
+				email: "rohitkondekar@gmail.com",
+    			name: "Rohit"
+			},
+			text:"Yummy Tacos"
+		},
+	]
+})
+
+db.ads.insert(
+{
+	posted_by:{
+		email: "richiecafe@food.com",
+    	name: "Richie's Cafe"
+	},
+	title:"SeaFood",
+	description:"Great Discounts on sea food",
+	tags:["food"],
+	start_date: new Date("2015-11-20"),
+	end_date: new Date("2015-12-8"),
+	category:"Restaurant",
+	location: {
+		type: "Point", 
+		coordinates: [-118.2322937, 34.0582517 ] 
+	}, //longitude,latitude
+	comments:[
+		{
+			posted_by:{
+				email: "rohitkondekar@gmail.com",
+    			name: "Rohit"
+			},
+			text:"Terrible Food"
+		},
+	]
+})
 
 db.ads.createIndex({location:"2dsphere"})

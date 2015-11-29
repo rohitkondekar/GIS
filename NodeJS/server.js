@@ -56,6 +56,11 @@ app.post('/api/ads/within', function (req, res){
 	var longitude 	= req.body.longitude
 	var distance 	= req.body.distance
 	var type 		= req.body.category
+	var count 		= req.body.count
+
+	if (typeof count == 'undefined') {
+		count = 100
+	}
 
 	AdsModel.geoNear(
 		{
@@ -67,7 +72,8 @@ app.post('/api/ads/within', function (req, res){
 		},
 		spherical : true,
 		lean: true,
-		maxDistance : distance
+		maxDistance : distance,
+		limit: count
 
 	}, function(err, ads){
 

@@ -11,16 +11,17 @@ import MapKit
 import SwiftyJSON
 
 class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
-
+    
     @IBOutlet weak var mapView : MKMapView!
-    var locationManager: CLLocationManager?
     @IBOutlet weak var gpsButton: UIButton!
     @IBOutlet weak var slider: UISlider!
     var actionButton: ActionButton!
     
-    var circleOverlay:MKCircle?
-    var jsonData:JSON?
-    var isWindowEnabled:Bool = false
+    var locationManager: CLLocationManager?
+    var circleOverlay:MKCircle?                     // ? do we need this
+    var jsonData:JSON?                              // Actual data from mongo
+    var isWindowEnabled:Bool = false                // window query is active or not
+    var windowAnnotations:[MKPointAnnotation] = []  // Stores annotations sequentially for a polygon
     
     
     //MARK: ViewRelated
@@ -30,19 +31,19 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         mapView.delegate = self
         
         // Fetch data as soon as possible
-        fetchReloadData(Defaults.defaultDistance)
+        fetchReloadData(Defaults.defaultDistance, limitCount:  nil)
         
         
         locationManager = CLLocationManager()
         locationManager?.delegate = self
         if CLLocationManager.authorizationStatus() != CLAuthorizationStatus.AuthorizedAlways{
-                self.locationManager?.requestAlwaysAuthorization()
+            self.locationManager?.requestAlwaysAuthorization()
         }
-
+        
         mapView.showsCompass        = true
         mapView.showsUserLocation   = true
         mapView.showsBuildings      = true
-    
+        
         
         self.adjustZoomLevelOnMapDefault()
         
@@ -57,9 +58,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         let windowImage = UIImage(named: "polygon.png")
         let window      = ActionButtonItem(title: "Window", image: windowImage)
         window.action   = {item in self.windowButtonActive()}
-    
+        
         actionButton    = ActionButton(attachedToView: self.view, items: [nearBy,range, window], verticalConstrain: 119, horizontalConstraint: 14)
-    
+        
         actionButton.action = { button in
             button.toggleMenu()
         }
@@ -93,6 +94,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         let annotation          = MKPointAnnotation()
         annotation.coordinate   = touchCoordinate
         self.mapView.addAnnotation(annotation)
+        self.windowAnnotations.append(annotation)
+        checkPolygon()
     }
     
     
@@ -104,7 +107,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         // Remove Everything
         self.windowButtonDisable()
         
-        self.fetchReloadData(nil)
+        self.fetchReloadData(nil,limitCount: nil)
         self.slider.hidden = false
         addCircleOverlay(self.getUserLocation(self.mapView))
         self.toggleActionButton()
@@ -120,15 +123,15 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     func nearByButtonActive(){
         
-         // Remove Everything
+        // Remove Everything
         self.rangeButtonDisable()
         self.windowButtonDisable()
         
-        self.fetchReloadData(Defaults.defaultDistance)
+        self.fetchReloadData(Defaults.defaultDistance,limitCount: nil)
         self.toggleActionButton()
         self.adjustZoomLevelOnMapDefault()
     }
-
+    
     func windowButtonActive(){
         self.rangeButtonDisable()
         self.isWindowEnabled = true
@@ -163,23 +166,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         mapView.addOverlay(circleOverlay!)
     }
     
-    func mapView(mapView: MKMapView, rendererForOverlay overlay: MKOverlay) -> MKOverlayRenderer {
-        
-        if overlay.isKindOfClass(MKCircle) {
-            let circleRenderer          = MKCircleRenderer(overlay: overlay)
-            circleRenderer.fillColor    = UIColor(colorLiteralRed: 1, green: 1, blue: 0, alpha: 0.05)
-            
-            
-            circleRenderer.strokeColor  = UIColor.redColor()
-            circleRenderer.lineWidth    = 1
-            return circleRenderer
-        }
-        
-        
-        return MKOverlayRenderer()
-        
-    }
-    
     func adjustZoomLevelOnMap(){
         let distance    = milesToMeters(Double(slider.value))*2+200
         let region      = MKCoordinateRegionMakeWithDistance(self.getUserLocation(self.mapView), distance, distance)
@@ -200,14 +186,14 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     @IBAction func sliderChangeFinished(sender: UISlider) {
         
-        fetchReloadData(nil)
+        fetchReloadData(nil,limitCount: nil)
         self.adjustZoomLevelOnMap()
     }
-
+    
     //MARK: Custom Methods
     
     func milesToMeters(value:Double) -> Double{
-            return Defaults.meterToMile*value
+        return Defaults.meterToMile*value
     }
     
     func getUserLocation(mapview: MKMapView) -> CLLocationCoordinate2D{
@@ -218,8 +204,33 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         return mapview.userLocation.coordinate
     }
     
+    func checkPolygon() {
+        
+        print(self.windowAnnotations.count)
+        if self.windowAnnotations.count < 3 {
+            return
+        }
+        print("adding overlay")
+        self.mapView.removeOverlays(self.mapView.overlays)
+        var coordinateList:[CLLocationCoordinate2D]  = self.getPolygonCoordinates(self.windowAnnotations)
+        let polygon         = MKPolygon(coordinates: &coordinateList, count: coordinateList.count)
+        self.mapView.addOverlay(polygon)
+        print(polygon)
+    }
+    
+    func getPolygonCoordinates(annotations:[MKAnnotation]) -> [CLLocationCoordinate2D]{
+        
+        var coordinateList:[CLLocationCoordinate2D] = []
+        for annotation in annotations {
+            coordinateList.append(annotation.coordinate)
+        }
+        coordinateList.append(coordinateList.first!)
+        
+        return coordinateList
+    }
+    
     //MARK: REST Calls
-    func fetchReloadData(defaultDistance:Double?) {
+    func fetchReloadData(defaultDistance:Double?, var limitCount:Int?) {
         
         let userCoordinates = self.getUserLocation(self.mapView)
         
@@ -232,9 +243,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             distance        = defaultDistance!
         }
         
+        if limitCount == nil {
+            limitCount = 100
+        }
+        
         let email           = NSUserDefaults.standardUserDefaults().valueForKey("email")!
         
-        RestApiManager.sharedInstance.makeHTTPPostRequest("/api/ads/within", body: ["email" : email, "latitude" : userCoordinates.latitude, "longitude": userCoordinates.longitude, "distance" : distance, "category": Defaults.categoryRestaurant], onCompletion: handleRESTCall)
+        RestApiManager.sharedInstance.makeHTTPPostRequest("/api/ads/within", body: ["email" : email, "latitude" : userCoordinates.latitude, "longitude": userCoordinates.longitude, "distance" : distance, "category": Defaults.categoryRestaurant, "count": limitCount!], onCompletion: handleRESTCall)
     }
     
     func handleRESTCall(json:JSON,error:NSError?) {
@@ -245,16 +260,15 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             annotations.append(JSONAnnotationModel(json: json, index:index))
         }
         
+        print(annotations)
         dispatch_async(dispatch_get_main_queue(), {
             self.mapView.removeAnnotations(self.mapView.annotations)
             self.mapView.addAnnotations(annotations)
         })
     }
     
-    
-    
-    
-    //Mark: - Map Methods
+
+    //MARK: - Map Methods
     func mapView(mapView: MKMapView, didUpdateUserLocation userLocation: MKUserLocation) {
         mapView.centerCoordinate = (userLocation.location?.coordinate)!
     }
@@ -288,13 +302,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             
         }
         else {
-        
+            
             let identifier = Defaults.categoryRestaurant
-        
+            
             //var view: MKPinAnnotationView
             var view: MKAnnotationView
             if let annotation = annotation as? JSONAnnotationModel {
-
+                
                 if let dequedView           = mapView.dequeueReusableAnnotationViewWithIdentifier(identifier) as? MKPinAnnotationView {
                     dequedView.annotation   = annotation
                     view                    = dequedView
@@ -310,6 +324,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                     view.calloutOffset          = CGPoint(x: -5, y: 5)
                     view.rightCalloutAccessoryView = UIButton(type: .DetailDisclosure) as UIView
                 }
+                print("in annotation model")
                 
                 return view
             }
@@ -318,12 +333,39 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         return nil
     }
     
+    
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         let location = view.annotation as! JSONAnnotationModel
         let launchOptions = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving]
         location.mapItem().openInMapsWithLaunchOptions(launchOptions)
     }
     
+    
+    func mapView(mapView: MKMapView, rendererForOverlay overlay: MKOverlay) -> MKOverlayRenderer {
+        
+        if overlay.isKindOfClass(MKCircle) {
+            let circleRenderer          = MKCircleRenderer(overlay: overlay)
+            circleRenderer.fillColor    = UIColor(colorLiteralRed: 1, green: 1, blue: 0, alpha: 0.05)
+            
+            
+            circleRenderer.strokeColor  = UIColor.redColor()
+            circleRenderer.lineWidth    = 1
+            return circleRenderer
+        }
+        else if overlay.isKindOfClass(MKPolygon) {
+            print("rendering polygon")
+            let polygonView             = MKPolygonRenderer(overlay: overlay)
+            polygonView.strokeColor     = UIColor.redColor()
+            polygonView.fillColor       = UIColor(colorLiteralRed: 1, green: 1, blue: 1, alpha: 0.09)
+            polygonView.lineWidth       = 2
+            return polygonView
+        }
+        
+        
+        return MKOverlayRenderer()
+        
+    }
+
     
     // Mark: - Buttons
     @IBAction func gpsButton(sender: UIButton) {
