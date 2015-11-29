@@ -1,0 +1,27 @@
+{
+  "name": "gis",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "konfig": "^0.2.1",
+    "express": "^4.13.3",
+    "crypto": "^0.0.3",
+    "body-parser": "^1.14.0",
+    "method-override": "^2.3.5",
+    "mongoose": "^4.1.8",
+    "mongoose-findorcreate": "^0.1.2",
+    "morgan": "^1.6.1",
+    "passport-http-bearer": "^1.0.1",
+    "passport": "^0.3.0",
+    "passport-facebook-token": "^2.3.0",
+    "validator": "^4.0.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "rohitkondekar",
+  "license": "ISC"
+}

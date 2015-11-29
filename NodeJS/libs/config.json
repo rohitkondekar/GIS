@@ -1,0 +1,14 @@
+{
+    "port" : 3000,
+
+    "security": {
+        "tokenLife" : 3600
+    },
+
+    "mongoose": {
+        "uri": "mongodb://localhost/test1"
+    },
+
+    "FACEBOOK_APP_ID": "1637251119869313",
+    "FACEBOOK_APP_SECRET": "cec9c5bdf329f030fa63b539e39fb388"
+}
