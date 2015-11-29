@@ -31,18 +31,32 @@ public class ActionButton: NSObject {
     /// The action the button should perform when tapped
     public var action: ActionButtonAction?
 
-    /// The button's background color
-    public var backgroundColor: UIColor? {
+    /// The button's background color : set default color and selected color
+    public var backgroundColor: UIColor = UIColor(red: 238.0/255.0, green: 130.0/255.0, blue: 34.0/255.0, alpha:1.0) {
         willSet {
             floatButton.backgroundColor = newValue
+            backgroundColorSelected = newValue
         }
     }
+    
+    /// The button's background color : set default color
+    public var backgroundColorSelected: UIColor = UIColor(red: 238.0/255.0, green: 130.0/255.0, blue: 34.0/255.0, alpha:1.0)
     
     /// Indicates if the buttons is active (showing its items)
     private(set) public var active: Bool = false
     
     /// An array of items that the button will present
-    internal var items: [ActionButtonItem]?
+    internal var items: [ActionButtonItem]? {
+        willSet {
+            for abi in self.items! {
+                abi.view.removeFromSuperview()
+            }
+        }
+        didSet {
+            placeButtonItems()
+            showActive(true)
+        }
+    }
     
     /// The button that will be presented to the user
     private var floatButton: UIButton!
@@ -60,9 +74,9 @@ public class ActionButton: NSObject {
     private let itemOffset = -55
     
     /// the float button's radius
-    private let floatButtonRadius = 50
+    private let floatButtonRadius = 40
     
-    public init(attachedToView view: UIView, items: [ActionButtonItem]?) {
+    public init(attachedToView view: UIView, items: [ActionButtonItem]?, verticalConstrain: Int?, horizontalConstraint: Int?) {
         super.init()
         
         self.parentView = view
@@ -76,9 +90,10 @@ public class ActionButton: NSObject {
         self.floatButton.layer.shadowOffset = CGSize(width: 1, height: 1)
         self.floatButton.layer.shadowColor = UIColor.grayColor().CGColor
         self.floatButton.setTitle("+", forState: .Normal)
-        self.floatButton.backgroundColor = UIColor(red: 238.0/255.0, green: 130.0/255.0, blue: 34.0/255.0, alpha:1.0)
-        self.floatButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
+        self.floatButton.setImage(nil, forState: .Normal)
+        self.floatButton.backgroundColor = self.backgroundColor
         self.floatButton.titleLabel!.font = UIFont(name: "HelveticaNeue-Light", size: 35)
+        self.floatButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
         self.floatButton.userInteractionEnabled = true
         self.floatButton.translatesAutoresizingMaskIntoConstraints = false
         
@@ -94,26 +109,51 @@ public class ActionButton: NSObject {
         let tap = UITapGestureRecognizer(target: self, action: Selector("backgroundTapped:"))
         self.contentView.addGestureRecognizer(tap)
         
-        self.installConstraints()
+        self.installConstraints(verticalConstrain, horizontalConstraint: horizontalConstraint)
     }
     
     required public init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //MARK: - Set Methods
+    public func setTitle(title: String?, forState state: UIControlState) {
+        floatButton.setImage(nil, forState: state)
+        floatButton.setTitle(title, forState: state)
+        floatButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
+    }
+    
+    public func setImage(image: UIImage?, forState state: UIControlState) {
+        setTitle(nil, forState: state)
+        floatButton.setImage(image, forState: state)
+        floatButton.adjustsImageWhenHighlighted = false
+        floatButton.contentEdgeInsets = UIEdgeInsetsZero
+    }
+    
     //MARK: - Auto Layout Methods
     /**
         Install all the necessary constraints for the button. By the default the button will be placed at 15pts from the bottom and the 15pts from the right of its *parentView*
     */
-    private func installConstraints() {
+    private func installConstraints(verticalConstrain: Int?, horizontalConstraint: Int?) {
         let views = ["floatButton":self.floatButton, "parentView":self.parentView]
         let width = NSLayoutConstraint.constraintsWithVisualFormat("H:[floatButton(\(floatButtonRadius))]", options: NSLayoutFormatOptions.AlignAllCenterX, metrics: nil, views: views)
         let height = NSLayoutConstraint.constraintsWithVisualFormat("V:[floatButton(\(floatButtonRadius))]", options: NSLayoutFormatOptions.AlignAllCenterX, metrics: nil, views: views)
         self.floatButton.addConstraints(width)
         self.floatButton.addConstraints(height)
         
-        let trailingSpacing = NSLayoutConstraint.constraintsWithVisualFormat("V:[floatButton]-15-|", options: NSLayoutFormatOptions.AlignAllCenterX, metrics: nil, views: views)
-        let bottomSpacing = NSLayoutConstraint.constraintsWithVisualFormat("H:[floatButton]-15-|", options: NSLayoutFormatOptions.AlignAllCenterX, metrics: nil, views: views)
+        var trailingSpacing = NSLayoutConstraint.constraintsWithVisualFormat("V:[floatButton]-15-|", options: NSLayoutFormatOptions.AlignAllCenterX, metrics: nil, views: views)
+        var bottomSpacing = NSLayoutConstraint.constraintsWithVisualFormat("H:[floatButton]-15-|", options: NSLayoutFormatOptions.AlignAllCenterX, metrics: nil, views: views)
+        
+        if verticalConstrain != nil {
+            trailingSpacing = NSLayoutConstraint.constraintsWithVisualFormat("V:[floatButton]-"+String(verticalConstrain!)+"-|", options: NSLayoutFormatOptions.AlignAllCenterX, metrics: nil, views: views)
+        }
+        
+        if horizontalConstraint != nil {
+            bottomSpacing = NSLayoutConstraint.constraintsWithVisualFormat("H:[floatButton]-"+String(horizontalConstraint!)+"-|", options: NSLayoutFormatOptions.AlignAllCenterX, metrics: nil, views: views)
+        }
+        
+        
+        
         self.parentView.addConstraints(trailingSpacing)
         self.parentView.addConstraints(bottomSpacing)
     }
@@ -171,42 +211,51 @@ public class ActionButton: NSObject {
         self.showBlur()
         
         self.active = !self.active
+        self.floatButton.backgroundColor = self.active ? backgroundColorSelected : backgroundColor
+        self.floatButton.selected = self.active
     }
     
     private func animateMenu() {
         let rotation = self.active ? 0 : CGFloat(M_PI_4)
         
         UIView.animateWithDuration(0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0.1, options: UIViewAnimationOptions.AllowAnimatedContent, animations: {
-            self.floatButton.transform = CGAffineTransformMakeRotation(rotation)
-    
-            if self.active == false {
-                self.contentView.alpha = 1.0
-                
-                if let optionalItems = self.items {
-                    for (index, item) in optionalItems.enumerate() {
-                        let offset = index + 1
-                        let translation = self.itemOffset * offset
-                        item.view.transform = CGAffineTransformMakeTranslation(0, CGFloat(translation))
-                        item.view.alpha = 1
-                    }
-                }
-            } else {
-                self.contentView.alpha = 0.0
-                
-                if let optionalItems = self.items {
-                    for item in optionalItems {
-                        item.view.transform = CGAffineTransformMakeTranslation(0, 0)
-                        item.view.alpha = 0
-                    }
-                }
+            
+            if self.floatButton.imageView?.image == nil {
+                self.floatButton.transform = CGAffineTransformMakeRotation(rotation)
             }
+    
+            self.showActive(false)
         }, completion: {completed in
             if self.active == false {
                 self.hideBlur()
             }
         })
     }
-        
+    
+    private func showActive(active: Bool) {
+        if self.active == active {
+            self.contentView.alpha = 0.95
+            
+            if let optionalItems = self.items {
+                for (index, item) in optionalItems.enumerate() {
+                    let offset = index + 1
+                    let translation = self.itemOffset * offset
+                    item.view.transform = CGAffineTransformMakeTranslation(0, CGFloat(translation))
+                    item.view.alpha = 1
+                }
+            }
+        } else {
+            self.contentView.alpha = 0.0
+            
+            if let optionalItems = self.items {
+                for item in optionalItems {
+                    item.view.transform = CGAffineTransformMakeTranslation(0, 0)
+                    item.view.alpha = 0
+                }
+            }
+        }
+    }
+    
     private func showBlur() {
         self.parentView.insertSubview(self.contentView, belowSubview: self.floatButton)
     }
@@ -218,7 +267,7 @@ public class ActionButton: NSObject {
     /**
         Animates the button pressing, by the default this method just scales the button down when it's pressed and returns to its normal size when the button is no longer pressed
     
-        :param: scale how much the button should be scaled
+        - parameter scale: how much the button should be scaled
     */
     private func animatePressingWithScale(scale: CGFloat) {
         UIView.animateWithDuration(0.2, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0.1, options: UIViewAnimationOptions.AllowAnimatedContent, animations: {

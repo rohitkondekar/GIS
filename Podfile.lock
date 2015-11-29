@@ -1,0 +1,25 @@
+PODS:
+  - ActionButton (0.1.4)
+  - GoogleMaps (1.10.5)
+  - SwiftyJSON (2.3.1)
+
+DEPENDENCIES:
+  - ActionButton
+  - GoogleMaps
+  - SwiftyJSON (from `https://github.com/SwiftyJSON/SwiftyJSON.git`)
+
+EXTERNAL SOURCES:
+  SwiftyJSON:
+    :git: https://github.com/SwiftyJSON/SwiftyJSON.git
+
+CHECKOUT OPTIONS:
+  SwiftyJSON:
+    :commit: 5ccffc14df519cf29b8dfbc7c1698373f2a6da40
+    :git: https://github.com/SwiftyJSON/SwiftyJSON.git
+
+SPEC CHECKSUMS:
+  ActionButton: 1b94024013cf57e960d09aa56792f29e1bb545e0
+  GoogleMaps: da51c62c338c2d9c47cdad470a0d1e0e4b8544e4
+  SwiftyJSON: 592b53bee5ef3dd9b3bebc6b9cb7ee35426ae8c3
+
+COCOAPODS: 0.39.0

@@ -15,9 +15,11 @@ class RestApiManager: NSObject {
     
     static let sharedInstance = RestApiManager()
     
+    let defaultPath = "http://localhost:3000"
+    
     //MARK: Perform a GET Request
     func makeHTTPGetRequest(path: String, onCompletion: ServiceResponse) {
-        let request = NSMutableURLRequest(URL: NSURL(string: path)!)
+        let request = NSMutableURLRequest(URL: NSURL(string: defaultPath+path)!)
         
         let session = NSURLSession.sharedSession()
         
@@ -29,16 +31,18 @@ class RestApiManager: NSObject {
     }
     
     //MARK: Perform a POST Request
-    func makeHTTPPostRequest(path: String, body: [String: AnyObject], onCompletion: ServiceResponse) {
+    func makeHTTPPostRequest(path: String, body: [String: AnyObject]?, onCompletion: ServiceResponse?) {
         
-        let request = NSMutableURLRequest(URL: NSURL(string: path)!)
+        let request = NSMutableURLRequest(URL: NSURL(string: defaultPath+path)!)
         
         // Set the method to POST
         request.HTTPMethod = "POST"
         
         // Set the POST body for the request
         do {
-            request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(body, options: NSJSONWritingOptions(rawValue:0))
+            request.HTTPBody = try NSJSONSerialization.dataWithJSONObject( (body != nil ? body! : []) , options: NSJSONWritingOptions(rawValue:0))
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.addValue("application/json", forHTTPHeaderField: "Accept")
         }
         catch {
             
@@ -48,7 +52,10 @@ class RestApiManager: NSObject {
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, err -> Void in
             let json:JSON = JSON(data: data!)
-            onCompletion(json, err)
+            
+            if onCompletion != nil {
+                onCompletion?(json, err)
+            }
         })
         task.resume()
     }

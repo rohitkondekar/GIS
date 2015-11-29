@@ -13,8 +13,8 @@ class HomeTableViewController: UIViewController, MKMapViewDelegate, CLLocationMa
 
     @IBOutlet weak var menuButton: UIBarButtonItem!
     var containerViewController: ContainerViewController?
-
-    @IBOutlet weak var navigationBar: UINavigationItem!
+    var category = Defaults.category
+    @IBOutlet weak var NavigationItem: UINavigationItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,7 +25,10 @@ class HomeTableViewController: UIViewController, MKMapViewDelegate, CLLocationMa
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
         
-                // Uncomment the following line to preserve selection between presentations
+        self.NavigationItem.title = category
+        
+        
+        // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.

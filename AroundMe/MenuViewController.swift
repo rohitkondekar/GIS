@@ -16,6 +16,7 @@ class MenuViewController: UITableViewController, FBSDKLoginButtonDelegate {
     @IBOutlet weak var ProfileProfile: UIImageView!
     @IBOutlet weak var FacebookLoginButton: FBSDKLoginButton!
     
+    var labelClicked:String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,7 +69,15 @@ class MenuViewController: UITableViewController, FBSDKLoginButtonDelegate {
 
         // Set Label tag as 1 for this to work
         let label = cell?.contentView.viewWithTag(1) as! UILabel
-        print(label.text!)
+        self.labelClicked = label.text
+        
+        print(label.text! + " SideMenu clicked")
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "RestaurantSegue" {
+            
+        }
     }
     
     

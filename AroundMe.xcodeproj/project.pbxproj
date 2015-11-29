@@ -7,12 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BC127DD91C099D0A0049C577 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC127DD81C099D0A0049C577 /* DetailViewController.swift */; };
+		BC127DDB1C0A65420049C577 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC127DDA1C0A65420049C577 /* ActionButton.swift */; };
+		BC127DDD1C0A65500049C577 /* ActionButtonItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC127DDC1C0A65500049C577 /* ActionButtonItem.swift */; };
+		BC127DE21C0AB46D0049C577 /* JSONAnnotationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC127DE11C0AB46D0049C577 /* JSONAnnotationModel.swift */; };
 		BC1D79711BD43F5600D3F70C /* EmptySegueController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1D79701BD43F5600D3F70C /* EmptySegueController.swift */; };
 		BC1D79731BD4419000D3F70C /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1D79721BD4419000D3F70C /* ContainerViewController.swift */; };
 		BC1D79751BD466F100D3F70C /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1D79741BD466F100D3F70C /* MapViewController.swift */; };
+		BC31863D1C06C315004B8BEC /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC31863C1C06C315004B8BEC /* NavigationController.swift */; };
+		BC3186401C06C620004B8BEC /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC31863F1C06C620004B8BEC /* Defaults.swift */; };
 		BC51092A1BB7A12400F1B72E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BC5109291BB7A12400F1B72E /* Main.storyboard */; };
-		BC5416EE1BD30F2C002DBBDF /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC5416EC1BD30F2C002DBBDF /* ActionButton.swift */; };
-		BC5416EF1BD30F2C002DBBDF /* ActionButtonItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC5416ED1BD30F2C002DBBDF /* ActionButtonItem.swift */; };
 		BC77405A1C05A4960030B203 /* AdsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC7740591C05A4960030B203 /* AdsListViewController.swift */; };
 		BCC792AE1BB1436F00FEF355 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC792AD1BB1436F00FEF355 /* AppDelegate.swift */; };
 		BCC792B01BB1436F00FEF355 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC792AF1BB1436F00FEF355 /* ViewController.swift */; };
@@ -34,12 +38,16 @@
 		084922326F783433AF4BA165 /* Pods-AroundMe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AroundMe.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AroundMe/Pods-AroundMe.debug.xcconfig"; sourceTree = "<group>"; };
 		75AF15756ABEBE6C0D7AFFB1 /* Pods-AroundMe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AroundMe.release.xcconfig"; path = "Pods/Target Support Files/Pods-AroundMe/Pods-AroundMe.release.xcconfig"; sourceTree = "<group>"; };
 		BC0EED1CD2FEBC816E2D91AC /* Pods_AroundMe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AroundMe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BC127DD81C099D0A0049C577 /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		BC127DDA1C0A65420049C577 /* ActionButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
+		BC127DDC1C0A65500049C577 /* ActionButtonItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionButtonItem.swift; sourceTree = "<group>"; };
+		BC127DE11C0AB46D0049C577 /* JSONAnnotationModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONAnnotationModel.swift; sourceTree = "<group>"; };
 		BC1D79701BD43F5600D3F70C /* EmptySegueController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptySegueController.swift; sourceTree = "<group>"; };
 		BC1D79721BD4419000D3F70C /* ContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
 		BC1D79741BD466F100D3F70C /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		BC31863C1C06C315004B8BEC /* NavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
+		BC31863F1C06C620004B8BEC /* Defaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 		BC5109291BB7A12400F1B72E /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
-		BC5416EC1BD30F2C002DBBDF /* ActionButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
-		BC5416ED1BD30F2C002DBBDF /* ActionButtonItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionButtonItem.swift; sourceTree = "<group>"; };
 		BC7740591C05A4960030B203 /* AdsListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdsListViewController.swift; sourceTree = "<group>"; };
 		BCA0B7A51C05AB990033C8B5 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "Pods/../build/Debug-iphoneos/SwiftyJSON.framework"; sourceTree = "<group>"; };
 		BCC792AA1BB1436F00FEF355 /* AroundMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AroundMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -87,11 +95,42 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		BC31863B1C06C2ED004B8BEC /* NavigationContollers */ = {
+			isa = PBXGroup;
+			children = (
+				BC1D79701BD43F5600D3F70C /* EmptySegueController.swift */,
+				BC31863C1C06C315004B8BEC /* NavigationController.swift */,
+			);
+			name = NavigationContollers;
+			sourceTree = "<group>";
+		};
+		BC31863E1C06C607004B8BEC /* Configs */ = {
+			isa = PBXGroup;
+			children = (
+				BC31863F1C06C620004B8BEC /* Defaults.swift */,
+				BCF8A4FF1C05AE29001AD8F9 /* RestApiManager.swift */,
+				BC127DE11C0AB46D0049C577 /* JSONAnnotationModel.swift */,
+			);
+			name = Configs;
+			sourceTree = "<group>";
+		};
+		BC3186411C07B59E004B8BEC /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				BCE7E5921BD0A861002BD463 /* MenuViewController.swift */,
+				BC1D79721BD4419000D3F70C /* ContainerViewController.swift */,
+				BC1D79741BD466F100D3F70C /* MapViewController.swift */,
+				BC7740591C05A4960030B203 /* AdsListViewController.swift */,
+				BC127DD81C099D0A0049C577 /* DetailViewController.swift */,
+			);
+			name = Screens;
+			sourceTree = "<group>";
+		};
 		BC5416EB1BD30F1C002DBBDF /* ActionButton */ = {
 			isa = PBXGroup;
 			children = (
-				BC5416EC1BD30F2C002DBBDF /* ActionButton.swift */,
-				BC5416ED1BD30F2C002DBBDF /* ActionButtonItem.swift */,
+				BC127DDC1C0A65500049C577 /* ActionButtonItem.swift */,
+				BC127DDA1C0A65420049C577 /* ActionButton.swift */,
 			);
 			name = ActionButton;
 			sourceTree = "<group>";
@@ -117,6 +156,9 @@
 		BCC792AC1BB1436F00FEF355 /* AroundMe */ = {
 			isa = PBXGroup;
 			children = (
+				BC31863E1C06C607004B8BEC /* Configs */,
+				BC3186411C07B59E004B8BEC /* Screens */,
+				BC31863B1C06C2ED004B8BEC /* NavigationContollers */,
 				BC5416EB1BD30F1C002DBBDF /* ActionButton */,
 				BCE7E58D1BD0A675002BD463 /* SWRevealViewController */,
 				BCC792AD1BB1436F00FEF355 /* AppDelegate.swift */,
@@ -125,13 +167,7 @@
 				BCE7E5991BD0ED87002BD463 /* Assets.xcassets */,
 				BCC792B61BB1436F00FEF355 /* LaunchScreen.storyboard */,
 				BCC792B91BB1436F00FEF355 /* Info.plist */,
-				BCE7E5921BD0A861002BD463 /* MenuViewController.swift */,
 				BCE7E59B1BD0F337002BD463 /* HomeTableViewController.swift */,
-				BC1D79701BD43F5600D3F70C /* EmptySegueController.swift */,
-				BC1D79721BD4419000D3F70C /* ContainerViewController.swift */,
-				BC1D79741BD466F100D3F70C /* MapViewController.swift */,
-				BC7740591C05A4960030B203 /* AdsListViewController.swift */,
-				BCF8A4FF1C05AE29001AD8F9 /* RestApiManager.swift */,
 			);
 			path = AroundMe;
 			sourceTree = "<group>";
@@ -284,17 +320,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				BCC792B01BB1436F00FEF355 /* ViewController.swift in Sources */,
+				BC3186401C06C620004B8BEC /* Defaults.swift in Sources */,
 				BC1D79711BD43F5600D3F70C /* EmptySegueController.swift in Sources */,
 				BCF8A5001C05AE29001AD8F9 /* RestApiManager.swift in Sources */,
-				BC5416EF1BD30F2C002DBBDF /* ActionButtonItem.swift in Sources */,
 				BC1D79751BD466F100D3F70C /* MapViewController.swift in Sources */,
 				BC77405A1C05A4960030B203 /* AdsListViewController.swift in Sources */,
+				BC127DDD1C0A65500049C577 /* ActionButtonItem.swift in Sources */,
 				BCE7E5931BD0A861002BD463 /* MenuViewController.swift in Sources */,
 				BCC792AE1BB1436F00FEF355 /* AppDelegate.swift in Sources */,
+				BC31863D1C06C315004B8BEC /* NavigationController.swift in Sources */,
+				BC127DE21C0AB46D0049C577 /* JSONAnnotationModel.swift in Sources */,
 				BCE7E5911BD0A690002BD463 /* SWRevealViewController.m in Sources */,
 				BCE7E59C1BD0F337002BD463 /* HomeTableViewController.swift in Sources */,
+				BC127DD91C099D0A0049C577 /* DetailViewController.swift in Sources */,
 				BC1D79731BD4419000D3F70C /* ContainerViewController.swift in Sources */,
-				BC5416EE1BD30F2C002DBBDF /* ActionButton.swift in Sources */,
+				BC127DDB1C0A65420049C577 /* ActionButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
