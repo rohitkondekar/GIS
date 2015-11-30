@@ -15,6 +15,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     @IBOutlet weak var mapView : MKMapView!
     @IBOutlet weak var gpsButton: UIButton!
     @IBOutlet weak var slider: UISlider!
+    @IBOutlet weak var windowClearButton: UIButton!
     var actionButton: ActionButton!
     
     var locationManager: CLLocationManager?
@@ -68,7 +69,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
         
         // Default remove everything just enable nearby query
-        rangeButtonDisable()
+        self.rangeButtonDisable()
+        self.windowButtonDisable()
         
         let gestureLP:UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: "handleLongPress:")
         gestureLP.minimumPressDuration = 0.5
@@ -95,6 +97,11 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         annotation.coordinate   = touchCoordinate
         self.mapView.addAnnotation(annotation)
         self.windowAnnotations.append(annotation)
+        
+        print(touchCoordinate)
+        print(annotation.coordinate)
+        
+        
         checkPolygon()
     }
     
@@ -126,7 +133,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         // Remove Everything
         self.rangeButtonDisable()
         self.windowButtonDisable()
-        
         self.fetchReloadData(Defaults.defaultDistance,limitCount: nil)
         self.toggleActionButton()
         self.adjustZoomLevelOnMapDefault()
@@ -135,20 +141,42 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     func windowButtonActive(){
         self.rangeButtonDisable()
         self.isWindowEnabled = true
+        self.windowClearButton.hidden = false
         self.toggleActionButton()
+        self.disableMapInterations()
     }
     
     func windowButtonDisable(){
         self.mapView.removeAnnotations(mapView.annotations)
         self.mapView.removeOverlays(mapView.overlays)
         self.isWindowEnabled = false
+        self.enableMapInteractions()
+        self.windowClearButton.hidden = true
     }
     
     func toggleActionButton(){
         actionButton.toggleMenu()
     }
     
+    func disableMapInterations(){
+        self.mapView.zoomEnabled            = false
+        self.mapView.scrollEnabled          = false
+        self.mapView.pitchEnabled           = false
+        self.mapView.rotateEnabled          = false
+    }
     
+    func enableMapInteractions(){
+        self.mapView.zoomEnabled            = true
+        self.mapView.scrollEnabled          = true
+        self.mapView.pitchEnabled           = true
+        self.mapView.rotateEnabled          = true
+    }
+    
+    @IBAction func windowClearButtonClicked(sender: AnyObject) {
+        self.mapView.removeAnnotations(self.mapView.annotations)
+        self.mapView.removeOverlays(self.mapView.overlays)
+        windowAnnotations.removeAll()
+    }
     
     //MARK: Circle Realted
     
@@ -206,16 +234,17 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     func checkPolygon() {
         
-        print(self.windowAnnotations.count)
         if self.windowAnnotations.count < 3 {
             return
         }
-        print("adding overlay")
+
         self.mapView.removeOverlays(self.mapView.overlays)
         var coordinateList:[CLLocationCoordinate2D]  = self.getPolygonCoordinates(self.windowAnnotations)
         let polygon         = MKPolygon(coordinates: &coordinateList, count: coordinateList.count)
         self.mapView.addOverlay(polygon)
-        print(polygon)
+        
+        let doubleArray = getCoordinateToDoubleArray(coordinateList)
+        RestApiManager.sharedInstance.makeHTTPPostRequest("/api/ads/polygon", body: ["category": Defaults.categoryRestaurant, "vertices":doubleArray], onCompletion: handleRESTCall)
     }
     
     func getPolygonCoordinates(annotations:[MKAnnotation]) -> [CLLocationCoordinate2D]{
@@ -227,6 +256,16 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         coordinateList.append(coordinateList.first!)
         
         return coordinateList
+    }
+    
+    func getCoordinateToDoubleArray(coordinates:[CLLocationCoordinate2D]) -> [[Double]]{
+        var array:[[Double]] = []
+        
+        for coordinate in coordinates{
+            array.append([Double(coordinate.longitude),Double(coordinate.latitude)])
+        }
+        
+        return array
     }
     
     //MARK: REST Calls
@@ -260,9 +299,14 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             annotations.append(JSONAnnotationModel(json: json, index:index))
         }
         
-        print(annotations)
         dispatch_async(dispatch_get_main_queue(), {
-            self.mapView.removeAnnotations(self.mapView.annotations)
+            
+            for annotation in self.mapView.annotations {
+                if annotation.isKindOfClass(JSONAnnotationModel){
+                    self.mapView.removeAnnotation(annotation)
+                }
+            }
+            
             self.mapView.addAnnotations(annotations)
         })
     }
@@ -281,27 +325,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             return nil
         }
         
-        if self.isWindowEnabled {
-            
-            let identifier = Defaults.dropPinIdentifier
-            
-            var view: MKImmidiateDraggableAnnotationView
-            if let dequedView           = mapView.dequeueReusableAnnotationViewWithIdentifier(identifier) as? MKImmidiateDraggableAnnotationView {
-                dequedView.annotation   = annotation
-                view                    = dequedView
-            }
-            else {
-                let image           = UIImage(named: "windowpin.png")
-                view                = MKImmidiateDraggableAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-                view.image          = image
-                view.draggable      = true
-                view.canShowCallout = false
-            }
-            
-            return view
-            
-        }
-        else {
+        if annotation.isKindOfClass(JSONAnnotationModel){
             
             let identifier = Defaults.categoryRestaurant
             
@@ -324,10 +348,33 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                     view.calloutOffset          = CGPoint(x: -5, y: 5)
                     view.rightCalloutAccessoryView = UIButton(type: .DetailDisclosure) as UIView
                 }
-                print("in annotation model")
-                
                 return view
             }
+
+            
+        }
+        
+        
+        
+        if self.isWindowEnabled {
+//            
+            let identifier = Defaults.dropPinIdentifier
+//
+            var view: MKImmidiateDraggableAnnotationView
+//            if let dequedView           = mapView.dequeueReusableAnnotationViewWithIdentifier(identifier) as? MKImmidiateDraggableAnnotationView {
+//                dequedView.annotation   = annotation
+//                view                    = dequedView
+//            }
+//            else {
+                let image           = UIImage(named: "windowpin.png")
+                view                = MKImmidiateDraggableAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+                view.image          = image
+                view.draggable      = true
+                view.canShowCallout = false
+//            }
+            
+            return view
+            
         }
         
         return nil
@@ -353,17 +400,30 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             return circleRenderer
         }
         else if overlay.isKindOfClass(MKPolygon) {
-            print("rendering polygon")
             let polygonView             = MKPolygonRenderer(overlay: overlay)
             polygonView.strokeColor     = UIColor.redColor()
-            polygonView.fillColor       = UIColor(colorLiteralRed: 1, green: 1, blue: 1, alpha: 0.09)
+            polygonView.fillColor       = UIColor(colorLiteralRed: 0, green: 1, blue: 0, alpha: 0.1)
             polygonView.lineWidth       = 2
             return polygonView
         }
         
         
         return MKOverlayRenderer()
-        
+    }
+    
+    func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, didChangeDragState newState: MKAnnotationViewDragState, fromOldState oldState: MKAnnotationViewDragState) {
+
+        if newState == MKAnnotationViewDragState.Ending {
+            if self.windowAnnotations.count < 3 {
+                return
+            }
+            
+            self.mapView.removeOverlays(self.mapView.overlays)
+            self.checkPolygon()
+        }
+        else if newState == MKAnnotationViewDragState.Starting {
+            self.mapView.removeOverlays(self.mapView.overlays)
+        }
     }
 
     

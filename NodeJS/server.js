@@ -49,7 +49,7 @@ router.get('/',function(req,res) {
 
 
 
-
+// Within distance
 app.post('/api/ads/within', function (req, res){
 
 	var latitude 	= req.body.latitude
@@ -91,6 +91,27 @@ app.post('/api/ads/within', function (req, res){
 		res.json(ads)
 	})
 
+
+});
+
+// Within polygon
+app.post('/api/ads/polygon', function (req, res){
+
+	var vertices 	= req.body.vertices
+	var type 		= req.body.category
+
+	console.log(vertices)
+
+	var query = AdsModel.find({category:type})
+	query.where('location').within({
+		polygon: vertices
+	})
+
+	query.exec(function(err, ads){
+		console.log(err)
+		console.dir(ads)
+		res.json(ads)
+	})
 
 });
 

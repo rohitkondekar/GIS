@@ -15,9 +15,4 @@ class MKImmidiateDraggableAnnotationView: MKAnnotationView {
         self.selected = true
         super.touchesBegan(touches, withEvent: event)
     }
-    
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        print("Touches ended")
-    }
-
 }

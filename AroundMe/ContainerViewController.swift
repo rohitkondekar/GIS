@@ -18,6 +18,7 @@ class ContainerViewController: UIViewController {
     
     var listController:AdsListViewController?
     var sortBy:String = "distance"
+    var actionButton:ActionButton!
     
     var currentSegueIdentifier : String = ""
     @IBOutlet weak var toggleButton: UIButton!

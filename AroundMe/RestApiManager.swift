@@ -51,10 +51,13 @@ class RestApiManager: NSObject {
         let session = NSURLSession.sharedSession()
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, err -> Void in
-            let json:JSON = JSON(data: data!)
             
-            if onCompletion != nil {
-                onCompletion?(json, err)
+            if data != nil {
+                let json:JSON = JSON(data: data!)
+                
+                if onCompletion != nil {
+                    onCompletion?(json, err)
+                }
             }
         })
         task.resume()

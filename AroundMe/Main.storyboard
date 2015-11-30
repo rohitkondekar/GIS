@@ -86,11 +86,11 @@
                         <color key="sectionIndexColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="sectionIndexBackgroundColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
                         <view key="tableFooterView" contentMode="scaleToFill" id="pH4-UJ-cfM">
-                            <rect key="frame" x="0.0" y="296" width="320" height="305"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                            <rect key="frame" x="0.0" y="391" width="320" height="219"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="rX1-s3-yjj" customClass="FBSDKLoginButton">
-                                    <rect key="frame" x="8" y="275" width="304" height="30"/>
+                                    <rect key="frame" x="8" y="190" width="304" height="30"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                     <animations/>
                                     <color key="backgroundColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -221,6 +221,37 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
+                            <tableViewSection headerTitle="Advertise" id="odk-m8-8qz">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="3jB-bc-qNj">
+                                        <rect key="frame" x="0.0" y="329" width="320" height="52"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="3jB-bc-qNj" id="ELd-60-pIP">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="51"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="add-ads" id="Bso-Uq-qCT">
+                                                    <rect key="frame" x="8" y="9" width="32" height="34"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                                    <animations/>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add Advertisement" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="eNp-hg-vJU">
+                                                    <rect key="frame" x="50" y="5" width="352" height="42"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                                    <animations/>
+                                                    <fontDescription key="fontDescription" name="HiraginoSans-W6" family="Hiragino Sans" pointSize="14"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <animations/>
+                                            <color key="backgroundColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        </tableViewCellContentView>
+                                        <animations/>
+                                        <color key="backgroundColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
                         </sections>
                         <connections>
                             <outlet property="dataSource" destination="8NK-q9-3YF" id="rPD-Zn-hX6"/>
@@ -298,14 +329,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="324" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="GiT-gp-ZuA">
-                                <rect key="frame" x="273" y="449" width="40" height="40"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                <animations/>
-                                <connections>
-                                    <action selector="buttonPressed:" destination="tEm-MN-m6E" eventType="touchUpInside" id="WgJ-fz-Cgq"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="VRX-mW-Wfj">
                                 <rect key="frame" x="273" y="405" width="40" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
@@ -313,6 +336,14 @@
                                 <state key="normal" title="Button" image="sort-rating"/>
                                 <connections>
                                     <action selector="filterPressed:" destination="tEm-MN-m6E" eventType="touchUpInside" id="T72-cx-e1A"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="GiT-gp-ZuA">
+                                <rect key="frame" x="273" y="453" width="40" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                <animations/>
+                                <connections>
+                                    <action selector="buttonPressed:" destination="tEm-MN-m6E" eventType="touchUpInside" id="WgJ-fz-Cgq"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -364,6 +395,16 @@
                                     <action selector="sliderChangeFinished:" destination="ib2-Ni-vaF" eventType="touchUpInside" id="sT8-Yr-BOx"/>
                                 </connections>
                             </slider>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="gFF-VU-X7h">
+                                <rect key="frame" x="266" y="9" width="46" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Clear"/>
+                                <connections>
+                                    <action selector="windowClearButtonClicked:" destination="ib2-Ni-vaF" eventType="touchUpInside" id="LxM-Ip-qlj"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -372,6 +413,7 @@
                         <outlet property="gpsButton" destination="c2q-JR-7Lg" id="s5P-7i-EBf"/>
                         <outlet property="mapView" destination="KOs-Hd-bwN" id="mn2-Kr-cUH"/>
                         <outlet property="slider" destination="Ptl-bl-rGV" id="cqD-Jt-Ika"/>
+                        <outlet property="windowClearButton" destination="gFF-VU-X7h" id="u3U-cG-XvW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oqd-j5-QvL" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -547,6 +589,7 @@
     </scenes>
     <resources>
         <image name="Like-50" width="50" height="50"/>
+        <image name="add-ads" width="50" height="50"/>
         <image name="citybg" width="750" height="1334"/>
         <image name="food-48" width="48" height="48"/>
         <image name="food1" width="3504" height="2336"/>
