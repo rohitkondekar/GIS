@@ -73,6 +73,7 @@ var ads = new Schema({
   end_date    : Date,
   category    : String,
   location    : {type: {type:String}, coordinates: [Number]}, //longitude,latitude
+  imagedata   : Buffer,
   comments    : [
             {
               posted_by:{

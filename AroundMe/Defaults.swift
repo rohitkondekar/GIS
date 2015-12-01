@@ -10,7 +10,7 @@ import Foundation
 
 class Defaults {
     
-    static let category                     = "Restautant"
+    static let category                     = "Restaurant"
     
     static let sortRestaurants_byRating     = "/api/ads/restaurant/sortrating"
     static let sortRestaurants_byDistance   = "/api/ads/restaurant/sortdistance"
@@ -27,5 +27,6 @@ class Defaults {
 
     static let categoryRestaurant           = "Restaurant"
     static let dropPinIdentifier            = "DropPin"
+    static let newAdPinIdentifier            = "NewAdPin"
     static let defaultDistance:Double       = 3218 //2miles
 }

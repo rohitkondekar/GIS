@@ -17,6 +17,9 @@
 		BC31863D1C06C315004B8BEC /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC31863C1C06C315004B8BEC /* NavigationController.swift */; };
 		BC3186401C06C620004B8BEC /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC31863F1C06C620004B8BEC /* Defaults.swift */; };
 		BC499FD81C0B1FCA00618353 /* MKImmidiateDraggableAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC499FD71C0B1FCA00618353 /* MKImmidiateDraggableAnnotationView.swift */; };
+		BC499FE01C0CFACF00618353 /* CreateAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC499FDF1C0CFACF00618353 /* CreateAddViewController.swift */; };
+		BC499FE21C0D0FA700618353 /* NewAdMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC499FE11C0D0FA700618353 /* NewAdMapViewController.swift */; };
+		BC499FE41C0D144400618353 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BC499FE31C0D144400618353 /* Assets.xcassets */; };
 		BC51092A1BB7A12400F1B72E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BC5109291BB7A12400F1B72E /* Main.storyboard */; };
 		BC77405A1C05A4960030B203 /* AdsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC7740591C05A4960030B203 /* AdsListViewController.swift */; };
 		BCC792AE1BB1436F00FEF355 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC792AD1BB1436F00FEF355 /* AppDelegate.swift */; };
@@ -27,7 +30,6 @@
 		BCC792C51BB1447400FEF355 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCC792C41BB1447400FEF355 /* FBSDKShareKit.framework */; };
 		BCE7E5911BD0A690002BD463 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BCE7E5901BD0A690002BD463 /* SWRevealViewController.m */; };
 		BCE7E5931BD0A861002BD463 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE7E5921BD0A861002BD463 /* MenuViewController.swift */; };
-		BCE7E59A1BD0ED87002BD463 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BCE7E5991BD0ED87002BD463 /* Assets.xcassets */; };
 		BCE7E59C1BD0F337002BD463 /* HomeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE7E59B1BD0F337002BD463 /* HomeTableViewController.swift */; };
 		BCE7E59E1BD2E8B1002BD463 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCE7E59D1BD2E8B1002BD463 /* MapKit.framework */; };
 		BCF8A4FE1C05AD12001AD8F9 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCF8A4FD1C05AD12001AD8F9 /* SwiftyJSON.framework */; };
@@ -49,6 +51,9 @@
 		BC31863C1C06C315004B8BEC /* NavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		BC31863F1C06C620004B8BEC /* Defaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 		BC499FD71C0B1FCA00618353 /* MKImmidiateDraggableAnnotationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MKImmidiateDraggableAnnotationView.swift; sourceTree = "<group>"; };
+		BC499FDF1C0CFACF00618353 /* CreateAddViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateAddViewController.swift; sourceTree = "<group>"; };
+		BC499FE11C0D0FA700618353 /* NewAdMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewAdMapViewController.swift; sourceTree = "<group>"; };
+		BC499FE31C0D144400618353 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BC5109291BB7A12400F1B72E /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		BC7740591C05A4960030B203 /* AdsListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdsListViewController.swift; sourceTree = "<group>"; };
 		BCA0B7A51C05AB990033C8B5 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "Pods/../build/Debug-iphoneos/SwiftyJSON.framework"; sourceTree = "<group>"; };
@@ -64,7 +69,6 @@
 		BCE7E58F1BD0A690002BD463 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		BCE7E5901BD0A690002BD463 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		BCE7E5921BD0A861002BD463 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
-		BCE7E5991BD0ED87002BD463 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BCE7E59B1BD0F337002BD463 /* HomeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTableViewController.swift; sourceTree = "<group>"; };
 		BCE7E59D1BD2E8B1002BD463 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		BCF8A4FD1C05AD12001AD8F9 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "Pods/../build/Debug-iphoneos/SwiftyJSON.framework"; sourceTree = "<group>"; };
@@ -124,6 +128,8 @@
 				BC1D79741BD466F100D3F70C /* MapViewController.swift */,
 				BC7740591C05A4960030B203 /* AdsListViewController.swift */,
 				BC127DD81C099D0A0049C577 /* DetailViewController.swift */,
+				BC499FDF1C0CFACF00618353 /* CreateAddViewController.swift */,
+				BC499FE11C0D0FA700618353 /* NewAdMapViewController.swift */,
 			);
 			name = Screens;
 			sourceTree = "<group>";
@@ -193,7 +199,6 @@
 				BC5416EB1BD30F1C002DBBDF /* ActionButton */,
 				BCE7E58D1BD0A675002BD463 /* SWRevealViewController */,
 				BC5109291BB7A12400F1B72E /* Main.storyboard */,
-				BCE7E5991BD0ED87002BD463 /* Assets.xcassets */,
 				BCC792B91BB1436F00FEF355 /* Info.plist */,
 			);
 			path = AroundMe;
@@ -216,6 +221,7 @@
 		BCE7E58D1BD0A675002BD463 /* SWRevealViewController */ = {
 			isa = PBXGroup;
 			children = (
+				BC499FE31C0D144400618353 /* Assets.xcassets */,
 				BCE7E58F1BD0A690002BD463 /* SWRevealViewController.h */,
 				BCE7E5901BD0A690002BD463 /* SWRevealViewController.m */,
 				BCE7E58E1BD0A68F002BD463 /* AroundMe-Bridging-Header.h */,
@@ -286,7 +292,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BC51092A1BB7A12400F1B72E /* Main.storyboard in Resources */,
-				BCE7E59A1BD0ED87002BD463 /* Assets.xcassets in Resources */,
+				BC499FE41C0D144400618353 /* Assets.xcassets in Resources */,
 				BCC792B81BB1436F00FEF355 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -346,10 +352,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BC499FE01C0CFACF00618353 /* CreateAddViewController.swift in Sources */,
 				BCC792B01BB1436F00FEF355 /* ViewController.swift in Sources */,
 				BC3186401C06C620004B8BEC /* Defaults.swift in Sources */,
 				BC1D79711BD43F5600D3F70C /* EmptySegueController.swift in Sources */,
 				BCF8A5001C05AE29001AD8F9 /* RestApiManager.swift in Sources */,
+				BC499FE21C0D0FA700618353 /* NewAdMapViewController.swift in Sources */,
 				BC1D79751BD466F100D3F70C /* MapViewController.swift in Sources */,
 				BC77405A1C05A4960030B203 /* AdsListViewController.swift in Sources */,
 				BC127DDD1C0A65500049C577 /* ActionButtonItem.swift in Sources */,

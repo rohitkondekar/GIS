@@ -9,12 +9,15 @@
 import UIKit
 import SwiftyJSON
 
+
+
 class DetailViewController: UIViewController, UINavigationControllerDelegate {
 
     var jsonData:JSON?
     var row:Int?
     
     @IBOutlet weak var navBar: UINavigationBar!
+    @IBOutlet weak var expiryDate: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,30 +31,41 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
         let description = scrollview.viewWithTag(3) as! UITextView
         let postedBy    = scrollview.viewWithTag(4) as! UILabel
         
-        // TODO
-        imageview.image     = UIImage(named: "food"+String((row!%Defaults.numImages)+1))!
+        let date = self.jsonData!["end_date"].stringValue
+        expiryDate.text = "Expires on "+date.substringToIndex(date.startIndex.advancedBy(10))
+        
+        if !self.jsonData!["imagedata"].isExists(){
+            let image       = UIImage(named: "food"+String((row!%Defaults.numImages)+1))!
+            imageview.image = image
+        }
+        else {
+            print("in dexoded")
+            let decodedData = NSData(base64EncodedString: self.jsonData!["imagedata"].stringValue, options: NSDataBase64DecodingOptions(rawValue: 0))
+            imageview.image = UIImage(data: decodedData!)
+        }
+
+        
         postedBy.text       = "By: "+jsonData!["posted_by"]["name"].stringValue
         
 
-        description.attributedText = NSAttributedString(string: jsonData!["description"].stringValue, attributes: [NSFontAttributeName : UIFont(name: "HelveticaNeue-Italic", size: 17.0)!])
+        description.attributedText = NSAttributedString(string: jsonData!["description"].stringValue, attributes: [NSFontAttributeName : UIFont(name: "HelveticaNeue", size: 17.0)!])
         description.textContainerInset = UIEdgeInsetsZero
-
+        
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+   
+    @IBAction func fbButtonClicked(sender: UIBarButtonItem) {
+        let content : FBSDKShareLinkContent = FBSDKShareLinkContent()
+        content.contentURL = NSURL(string: "http://www.yelp.com/la")
+        content.contentTitle = jsonData!["title"].stringValue
+        content.contentDescription = jsonData!["description"].stringValue
+        content.imageURL = NSURL(string: "http://thenextweb.com/wp-content/blogs.dir/1/files/2012/10/Food.jpg")
+        
+        let button : FBSDKShareButton = FBSDKShareButton()
+        
+        button.shareContent = content
+        button.sendActionsForControlEvents(UIControlEvents.TouchUpInside)
+        
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+  
 }

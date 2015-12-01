@@ -15,13 +15,16 @@ var mile			= 1609.34
 // Create our Express application
 var app = express();
 
+
 // To Support Json data
 
 // Use the body-parser package in our application
 app.use(bodyParser.urlencoded({
-  extended: true
+  extended: true,limit: '50mb'
 }));
-app.use(bodyParser.json());
+app.use(bodyParser.json({
+	limit: '50mb'
+}));
 
 app.use(morgan('combined'));
 
@@ -115,6 +118,41 @@ app.post('/api/ads/polygon', function (req, res){
 
 });
 
+// insert new ad
+app.post('/api/ads/add', function (req, res){
+
+
+	var ad = new AdsModel({
+		posted_by:{
+		email: req.body.email,
+    	name: req.body.name
+		},
+		title: req.body.title,
+		description: req.body.description,
+		start_date: new Date("2015-11-19"),
+		end_date: new Date(req.body.end_date),
+		category: req.body.category,
+		location: {
+		type: "Point", 
+		coordinates: [req.body.longitude, req.body.latitude] 
+		},
+		imagedata: new Buffer(req.body.imagedata, 'base64')
+	})
+
+	ad.save(function (err) {
+	  if (err) {
+			return err
+	  }
+	  else {
+	  	console.log("Post saved")
+	  	console.log(ad)
+	  }
+	})
+
+	
+})
+
+
 
 app.post('/api/ads/restaurant/sortdistance', function (req, res){
 
@@ -166,7 +204,11 @@ app.post('/api/ads/restaurant/sortdistance', function (req, res){
 
 
 app.post('/api/ads/restaurant/sortrating', function (req, res){
-	var query = AdsModel.find({category:'Restaurant'})
+	var query = AdsModel.find({category:'Restaurant',
+		end_date : {
+			$gt : new Date()
+		}
+	})
 
 	query.sort({
 			likes_count : -1
@@ -192,8 +234,8 @@ app.post('/api/ads/restaurant', function (req, res){
 
 
 app.post('/api/ads/restaurant/like', function(req,res){
-
-	AdsModel.collection.update({_id: new ObjectId(req.body.id)},{$addToSet: {likes: req.body.email}}, function(err, numAffected){
+	console.log(req)
+	AdsModel.collection.update({_id: new ObjectId(req.body.id)},{$addToSet: {likes: req.body.userid}}, function(err, numAffected){
 		if(err != null) {
 			console.error(err)
 		}
@@ -211,7 +253,7 @@ app.post('/api/ads/restaurant/like', function(req,res){
 
 app.post('/api/ads/restaurant/unlike', function(req,res){
 	
-	AdsModel.collection.update({_id: new ObjectId(req.body.id)},{$pull: {likes: req.body.email}}, function(err, numAffected){
+	AdsModel.collection.update({_id: new ObjectId(req.body.id)},{$pull: {likes: req.body.userid}}, function(err, numAffected){
 		if(err != null) {
 			console.error(err)
 		}

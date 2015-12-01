@@ -144,8 +144,18 @@ class AdsListViewController: UITableViewController, CLLocationManagerDelegate {
         
         // view with image given tag 2
         let imageview   = uiview.viewWithTag(2)?.subviews.first as! UIImageView
-        let image       = UIImage(named: "food"+String((indexPath.row%Defaults.numImages)+1))!
-        imageview.image = image
+        
+        
+        
+        if !self.jsonData![indexPath.row]["imagedata"].isExists(){
+            let image       = UIImage(named: "food"+String((indexPath.row%Defaults.numImages)+1))!
+            imageview.image = image
+        }
+        else {
+            
+            let decodedData = NSData(base64EncodedString: self.jsonData![indexPath.row]["imagedata"].stringValue, options: NSDataBase64DecodingOptions(rawValue: 0))
+            imageview.image = UIImage(data: decodedData!)
+        }
         
         let title       = uiview.viewWithTag(3) as! UILabel
         let postedBy    = uiview.viewWithTag(4) as! UILabel
@@ -153,7 +163,7 @@ class AdsListViewController: UITableViewController, CLLocationManagerDelegate {
         title.text      = self.jsonData![indexPath.row]["title"].stringValue
         postedBy.text   = self.jsonData![indexPath.row]["posted_by"]["name"].stringValue
 
-        let email       = NSUserDefaults.standardUserDefaults().valueForKey("email")! as! String
+        let id       = NSUserDefaults.standardUserDefaults().valueForKey("id")! as! String
         let likedUsers  = self.jsonData![indexPath.row]["likes"].arrayObject as? [String]
         
         // Assign tag to the button with the row number so that when the event fires we know which record it belonged to
@@ -163,7 +173,7 @@ class AdsListViewController: UITableViewController, CLLocationManagerDelegate {
                 button.tag = indexPath.row
                 button.addTarget(self, action: "likeButtonClicked:", forControlEvents: UIControlEvents.TouchUpInside)
                 
-                if likedUsers != nil && likedUsers!.contains(email){
+                if likedUsers != nil && likedUsers!.contains(id){
                     button.setImage(UIImage(named: Defaults.like), forState: UIControlState.Normal)
                 }
                 else {
@@ -231,12 +241,14 @@ class AdsListViewController: UITableViewController, CLLocationManagerDelegate {
         let email       = NSUserDefaults.standardUserDefaults().valueForKey("email")!
         var image       = UIImage(named: "Like Filled-50.png")
         
+        print(NSUserDefaults.standardUserDefaults().valueForKey("id")!)
+        
         if sender.currentImage == image {
             image       = UIImage(named: "Like-50.png")
-            RestApiManager.sharedInstance.makeHTTPPostRequest("/api/ads/restaurant/unlike", body: ["id" : adsId, "email" : email], onCompletion: nil)
+            RestApiManager.sharedInstance.makeHTTPPostRequest("/api/ads/restaurant/unlike", body: ["id" : adsId, "email" : email, "userid": NSUserDefaults.standardUserDefaults().valueForKey("id")!], onCompletion: nil)
         }
         else {
-            RestApiManager.sharedInstance.makeHTTPPostRequest("/api/ads/restaurant/like", body: ["id" : adsId, "email" : email], onCompletion: nil)
+            RestApiManager.sharedInstance.makeHTTPPostRequest("/api/ads/restaurant/like", body: ["id" : adsId, "email" : email, "userid": NSUserDefaults.standardUserDefaults().valueForKey("id")!], onCompletion: nil)
         }
         
         sender.setImage(image, forState: UIControlState.Normal)

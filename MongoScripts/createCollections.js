@@ -290,7 +290,8 @@ db.ads.insert(
 			text:"Awesome burgers!"
 		},
 	],
-	likes			:[]
+	likes			: [10154207611477678],
+	likes_count		: 1
 })
 
 db.ads.insert(

@@ -89,6 +89,7 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate {
                 defaults.setObject(result.valueForKey("first_name"), forKey: "first_name")
                 defaults.setObject(result.valueForKey("last_name"), forKey: "last_name")
                 defaults.setObject(result.valueForKey("email"), forKey: "email")
+                defaults.setObject(result.valueForKey("id"), forKey: "id")
 
                 let picturedata = result.valueForKey("picture")!["data"] as! NSDictionary
                 let pictureURL = picturedata["url"] as? String
