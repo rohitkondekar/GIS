@@ -234,7 +234,7 @@ app.post('/api/ads/restaurant', function (req, res){
 
 
 app.post('/api/ads/restaurant/like', function(req,res){
-	console.log(req)
+	console.log(req.body)
 	AdsModel.collection.update({_id: new ObjectId(req.body.id)},{$addToSet: {likes: req.body.userid}}, function(err, numAffected){
 		if(err != null) {
 			console.error(err)
@@ -252,7 +252,7 @@ app.post('/api/ads/restaurant/like', function(req,res){
 
 
 app.post('/api/ads/restaurant/unlike', function(req,res){
-	
+	console.log(req.body)
 	AdsModel.collection.update({_id: new ObjectId(req.body.id)},{$pull: {likes: req.body.userid}}, function(err, numAffected){
 		if(err != null) {
 			console.error(err)

@@ -21,16 +21,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         GMSServices.provideAPIKey("AIzaSyDdE1HNsgJZzqqGLcefuaM7IuHFzBQnWag")
-        
-        locationManager = CLLocationManager()
-        let status = CLLocationManager.authorizationStatus()
-    
-        if status != CLAuthorizationStatus.AuthorizedAlways{
-            self.locationManager?.requestAlwaysAuthorization()
-        }
-        else {
-            print("Location Auth enabled")
-        }
+//        
+//        locationManager = CLLocationManager()
+//        let status = CLLocationManager.authorizationStatus()
+//    
+//        if status != CLAuthorizationStatus.AuthorizedAlways{
+//            self.locationManager?.requestAlwaysAuthorization()
+//        }
+//        else {
+//            print("Location Auth enabled")
+//        }
         
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions);
     }

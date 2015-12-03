@@ -18,6 +18,7 @@ class JSONAnnotationModel: NSObject, MKAnnotation {
     let subtitle: String?
     let coordinate: CLLocationCoordinate2D
     let category: String?
+    let index: Int?
     
     init(json:JSON, index:Int) {
         
@@ -28,6 +29,8 @@ class JSONAnnotationModel: NSObject, MKAnnotation {
         
         let coord    = json[index]["location"]["coordinates"].arrayObject as! [Double]
         self.coordinate = CLLocationCoordinate2D(latitude: coord[1], longitude: coord[0])
+        
+        self.index  = index
         
         super.init()
         

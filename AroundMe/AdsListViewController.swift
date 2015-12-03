@@ -167,6 +167,7 @@ class AdsListViewController: UITableViewController, CLLocationManagerDelegate {
         let likedUsers  = self.jsonData![indexPath.row]["likes"].arrayObject as? [String]
         
         // Assign tag to the button with the row number so that when the event fires we know which record it belonged to
+        print(likedUsers)
         for tmp:AnyObject in uiview.viewWithTag(2)!.subviews{
             if tmp is UIButton {
                 let button = tmp as! UIButton
@@ -266,11 +267,22 @@ class AdsListViewController: UITableViewController, CLLocationManagerDelegate {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "detailSegue" {
             
-            let indexPath = sender as! NSIndexPath
+            self.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
             
-            let destinationController       = segue.destinationViewController as! DetailViewController
-            destinationController.jsonData  = jsonData![indexPath.row]
-            destinationController.row       = indexPath.row
+            var indexPath:NSIndexPath?
+            if let cell = sender as? UITableViewCell {
+                indexPath   = self.tableview.indexPathForCell(cell)!
+            }
+            else {
+                indexPath           = sender as? NSIndexPath
+            }
+            
+            let navController       = segue.destinationViewController as!  UINavigationController
+            
+            
+            let destinationController   = navController.topViewController as! DetailViewController
+            destinationController.jsonData  = jsonData![indexPath!.row]
+            destinationController.row       = indexPath!.row
         }
     }
 

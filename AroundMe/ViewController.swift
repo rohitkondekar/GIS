@@ -9,17 +9,30 @@
 import UIKit
 import FBSDKCoreKit
 import FBSDKLoginKit
+import CoreLocation
 
 class ViewController: UIViewController, FBSDKLoginButtonDelegate {
     
     @IBOutlet weak var FacebookLoginButton: FBSDKLoginButton!
+    var locationManager: CLLocationManager?
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        FacebookLoginButton.readPermissions = ["email","user_location"]
+        FacebookLoginButton.readPermissions = ["email","user_location","user_friends"]
         FacebookLoginButton.delegate = self
+        
+        
+        locationManager = CLLocationManager()
+        let status = CLLocationManager.authorizationStatus()
+        
+        if status != CLAuthorizationStatus.AuthorizedAlways{
+            self.locationManager?.requestAlwaysAuthorization()
+        }
+        else {
+            print("Location Auth enabled")
+        }
         
     }
 

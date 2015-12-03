@@ -53,8 +53,17 @@ class ContainerViewController: UIViewController {
                 segue.destinationViewController.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
                 self.view.addSubview(segue.destinationViewController.view)
                 segue.destinationViewController.didMoveToParentViewController(self)
+                
                 self.view.bringSubviewToFront(self.toggleButton)
+                
             }
+            
+//            self.toggleButton.frame = CGRectMake(
+//                self.toggleButton.frame.origin.x,
+//                self.toggleButton.frame.origin.y - 40,
+//                self.toggleButton.frame.size.width,
+//                self.toggleButton.frame.size.height)
+            
         }
         else if segue.identifier == ContainerViewController.SegueIdentifierSecond {
             self.swapFromViewControllers(self.childViewControllers[0], toViewContoller: segue.destinationViewController)
@@ -63,6 +72,12 @@ class ContainerViewController: UIViewController {
             self.listController         = segue.destinationViewController as? AdsListViewController
             self.listController?.sortBy = sortBy
             self.view.bringSubviewToFront(self.filterButton)
+//            
+//            self.toggleButton.frame = CGRectMake(
+//                self.toggleButton.frame.origin.x,
+//                self.toggleButton.frame.origin.y + 40,
+//                self.toggleButton.frame.size.width,
+//                self.toggleButton.frame.size.height)
         }
     }
     

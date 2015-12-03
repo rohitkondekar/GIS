@@ -16,6 +16,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     @IBOutlet weak var gpsButton: UIButton!
     @IBOutlet weak var slider: UISlider!
     @IBOutlet weak var windowClearButton: UIButton!
+    @IBOutlet weak var addressLabel: UILabel!
+    @IBOutlet weak var distanceLabel: UILabel!
     var actionButton: ActionButton!
     
     var locationManager: CLLocationManager?
@@ -23,6 +25,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     var jsonData:JSON?                              // Actual data from mongo
     var isWindowEnabled:Bool = false                // window query is active or not
     var windowAnnotations:[MKPointAnnotation] = []  // Stores annotations sequentially for a polygon
+    var currentAnnotation:MKAnnotation?
     
     
     //MARK: ViewRelated
@@ -60,7 +63,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         let window      = ActionButtonItem(title: "Window", image: windowImage)
         window.action   = {item in self.windowButtonActive()}
         
-        actionButton    = ActionButton(attachedToView: self.view, items: [nearBy,range, window], verticalConstrain: 119, horizontalConstraint: 14)
+        
+        actionButton    = ActionButton(attachedToView: self.view, items: [nearBy,range, window], verticalConstrain: 155, horizontalConstraint: 14)
         
         actionButton.action = { button in
             button.toggleMenu()
@@ -75,6 +79,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         let gestureLP:UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: "handleLongPress:")
         gestureLP.minimumPressDuration = 0.5
         self.mapView.addGestureRecognizer(gestureLP)
+        
+        self.updateReverseGeoCode(self.getUserLocation(self.mapView))
     }
     
     
@@ -268,6 +274,50 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         return array
     }
     
+    
+    
+    func updateReverseGeoCode(coordinate:CLLocationCoordinate2D) {
+        let location:CLLocation = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+        CLGeocoder().reverseGeocodeLocation(location, completionHandler: {(placemarks, error) in
+            
+            if placemarks != nil && placemarks!.count > 0{
+                
+                self.addressLabel.text = (placemarks![0].subThoroughfare?.capitalizedString)! + " " + (placemarks![0].thoroughfare?.capitalizedString)!
+            }
+        })
+    }
+    
+    func getUserDistance(coordinates:[Double],label:UILabel){
+        
+        let destinationCord = CLLocationCoordinate2DMake(coordinates[1], coordinates[0])
+        
+        let sourceCord:CLLocationCoordinate2D
+        let userLocation = self.getUserLocation(self.mapView)
+        
+        sourceCord  = CLLocationCoordinate2DMake((userLocation.latitude), (userLocation.longitude))
+        
+        let destinationPlaceMark:MKPlacemark = MKPlacemark.init(coordinate: destinationCord, addressDictionary: nil)
+        let sourcePlaceMark:MKPlacemark = MKPlacemark.init(coordinate: sourceCord, addressDictionary: nil)
+        
+        
+        let directionsRequest = MKDirectionsRequest()
+        directionsRequest.source = MKMapItem.init(placemark: sourcePlaceMark)
+        directionsRequest.destination = MKMapItem.init(placemark: destinationPlaceMark)
+        directionsRequest.transportType = MKDirectionsTransportType.Automobile
+        let directions = MKDirections.init(request: directionsRequest)
+        directions.calculateDirectionsWithCompletionHandler({
+            (response: MKDirectionsResponse?, error: NSError?) in
+            if response != nil && response?.routes.first != nil {
+                label.text = String(self.metersToMiles(Double((response?.routes.first?.distance)!)))+"M"
+            }
+        })
+        
+    }
+
+    func metersToMiles(distance:Double) -> Double{
+        return round(100*(distance/1609.344))/100
+    }
+    
     //MARK: REST Calls
     func fetchReloadData(defaultDistance:Double?, var limitCount:Int?) {
         
@@ -293,6 +343,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     func handleRESTCall(json:JSON,error:NSError?) {
         
+        self.jsonData   = json
         var annotations: [JSONAnnotationModel] = []
         
         for index in 0..<json.count {
@@ -383,9 +434,23 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        let location = view.annotation as! JSONAnnotationModel
-        let launchOptions = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving]
-        location.mapItem().openInMapsWithLaunchOptions(launchOptions)
+//        let location = view.annotation as! JSONAnnotationModel
+//        let launchOptions = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving]
+//        location.mapItem().openInMapsWithLaunchOptions(launchOptions)
+        
+        //var detailViewController        = DetailViewController()
+        let annotation                  = view.annotation as! JSONAnnotationModel
+        
+        var detailViewController = self.storyboard!.instantiateViewControllerWithIdentifier("DetailViewController") as! DetailViewController
+
+        
+        detailViewController.jsonData   = self.jsonData![annotation.index!]
+        
+        let navCon = UINavigationController.init(rootViewController: detailViewController)
+        detailViewController = navCon.topViewController as! DetailViewController
+        detailViewController.jsonData   = self.jsonData![annotation.index!]
+        detailViewController.row        = annotation.index!
+        self.presentViewController(navCon, animated: true, completion: nil)
     }
     
     
@@ -426,10 +491,35 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             self.mapView.removeOverlays(self.mapView.overlays)
         }
     }
+    
+    func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
+        self.updateReverseGeoCode((view.annotation?.coordinate)!)
+        
+        let latitude    = (view.annotation?.coordinate.latitude)! as Double
+        let longitude   = (view.annotation?.coordinate.longitude)! as Double
+        self.getUserDistance([longitude,latitude], label: self.distanceLabel)
+        self.currentAnnotation  = view.annotation
+    }
+    
+    func mapView(mapView: MKMapView, didDeselectAnnotationView view: MKAnnotationView) {
+        self.updateReverseGeoCode(self.getUserLocation(self.mapView))
+        self.distanceLabel.text = ""
+        self.currentAnnotation = nil
+    }
 
     
     // Mark: - Buttons
     @IBAction func gpsButton(sender: UIButton) {
         self.adjustZoomLevelOnMapDefault()
+    }
+    
+    @IBAction func adressViewClicked(sender: AnyObject) {
+        if self.currentAnnotation == nil {
+            return
+        }
+        let location = self.currentAnnotation as! JSONAnnotationModel
+        let launchOptions = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving]
+        location.mapItem().openInMapsWithLaunchOptions(launchOptions)
+        
     }
 }
